@@ -1,128 +1,173 @@
-var phraseChoice = {
-	q1: ["Kitten Mittons", "This is Charlie Kelly's invention for cats that stomp around too loudly"],
-	q2: ["Troll Toll", "You gotta pay this to get into that baby boy's soul"],
-	q3: ["Magnum Condom", "Frank likes to have this peeking out of his wallet to let the ladies know what he's packing"],
-	q4: ["The Nightman Cometh", "A Charlie Kelly original musical score"],
-	q5: ["The Waitress", "Charlie's one true love"],
-	q6: ["Greenman", "Charlie Kelly's costume of choice for Phillies games"],
-	q6: ["Milksteak", "Charlie Kelly's favorite food"],
-	q7: ["Paddy's Pub", "The gang 'works' here"],
-	q8: ["funny little green ghouls", "One of Charlie's likes"],
-	q9: ["magnets", "Charlie's interest"],
-	q10: ["people's knees", "Charlie dislikes these"],
-	q11: ["bird law", "Charlie is a self-proclaimed expert in this subject matter"],
-	q12: ["King of the Rats", "Charlie's nickname"],
-	q13: ["DENNIS System", "The name of the method that one of the gang uses to pick up women"],
-	q14: ["The Duster", "Mac's favorite long article of clothing"],
-	q15: ["Gruesome Twosome", "The self-dubbed nickname for the Frank and Charlie duo"]
-};
-
-	// var selectedWord = phraseChoice[Math.floor(Math.random() * phraseChoice.length)];
-	console.log(selectedWord);
-	//Variable to hold the index of guesses
-	var guessIndex = 0
-	//Variable to hold the index of guesses remainng
-	var guessesRemaining = 15 - guessIndex;
+window.onload = function(){	
+	//Object of the array of phrases [0] and hint for that phrase [1].
+	var phraseChoice = {
+		p1: ["kitten mittons", "This is Charlie Kelly's invention for cats that stomp around too loudly"],
+		p2: ["magnum condom", "Frank likes to have this peeking out of his wallet to let the ladies know what he's packing"],
+		p3: ["the nightman cometh", "A Charlie Kelly original musical score"],
+		p4: ["the waitress", "Charlie's one true love"],
+		p5: ["greenman", "Charlie Kelly's costume of choice for Phillies games"],
+		p6: ["milksteak", "Charlie Kelly's favorite food"],
+		p7: ["paddy's pub", "The gang 'works' here"],
+		p8: ["magnets", "Charlie's interest"],
+		p9: ["people's knees", "Charlie dislikes these"],
+		p10: ["bird law", "Charlie is a self-proclaimed expert in this subject matter"],
+		p11: ["dennis system", "The name of the method that one of the gang uses to pick up women"],
+		p12: ["the duster", "Mac's favorite long article of clothing"],
+		p13: ["gruesome twosome", "The self-dubbed nickname for the Frank and Charlie duo"]
+	};
+		
 	//Array of phraseChoice
 	var phraseArray = [
-	phraseChoice.q1,
-	phraseChoice.q2,
-	phraseChoice.q3,
-	phraseChoice.q4,
-	phraseChoice.q5,
-	phraseChoice.q6,
-	phraseChoice.q7,
-	phraseChoice.q8,
-	phraseChoice.q9,
-	phraseChoice.q10,
-	phraseChoice.q11,
-	phraseChoice.q12,
-	phraseChoice.q13,
-	phraseChoice.q14,
-	phraseChoice.q15];
+		phraseChoice.p1,
+		phraseChoice.p2,
+		phraseChoice.p3,
+		phraseChoice.p4,
+		phraseChoice.p5,
+		phraseChoice.p6,
+		phraseChoice.p7,
+		phraseChoice.p8,
+		phraseChoice.p9,
+		phraseChoice.p10,
+		phraseChoice.p11,
+		phraseChoice.p12,
+		phraseChoice.p13,
+		];
 
-	//FUNCTIONS
+
+	var guessesRemaining = 10; //Variable to hold the index of guesses remainng
+	var wins = 0; //# of wins in a session
+
+	var randomNumber;
+	var selectedWord = []; //Word(s) that are selected from the phraseArray
+	var selectedHint = []; //The associated hint of the word(s) that are selected from the phraseArray
+
+	var lettersUsed = []; //Array to hold letters that are guessed
+	var blankWord = []; //Array to hold the word in blanks
+
+	var space = 0; //Placeholder for spaces or other characters in words
+	var counter = 0; //Variable that counts number of correct guesses
+	var flag; //Variable used for logic purposes
+
+	//Calls on function that generates word(s) by randomly selecting a phrase from phraseArray
+	produceWord();
+
+	//=============================================================================
+	//								FUNCTIONS
 	//=============================================================================
 
+
+	//Function that generates a word randomly
 	function produceWord(){
-		
-	}
+		randomNumber = Math.floor(Math.random() * phraseArray.length);
+		selectedWord = phraseArray[randomNumber][0];
+		selectedHint = phraseArray[randomNumber][1];
+		console.log(selectedWord);
+		console.log(selectedHint);
+
+		for (var i=0; i<selectedWord.length; i++){
+			if(selectedWord[i] === " "){
+				blankWord.push("\u00A0\u00A0");
+				space++;
+			} else if (selectedWord[i] === "'") {
+				blankWord.push("'")
+				space++;
+			} else {
+				blankWord.push("_ ");
+			}
+			
+		}	
+			console.log("The number of spaces: " + space);
+			document.getElementById("hint").innerHTML="Hint: " + selectedHint;
+			document.getElementById("blank-word").innerHTML=blankWord.join("");
+			document.getElementById("lives-left").innerHTML="Chances left: " + guessesRemaining;
+	};
+
+	//Hint if user clicks hint button
+	var hint = function hint(){
+		document.getElementById("hintLocation").innerHTML="Hint: " + selectedHint;
+		console.log(selectedHint);
+	};
+	
+	play();
+	//When user enters key, this function  controls what happens when user types a key.  
+	function play(){
+		document.onkeyup = function(){
+			document.getElementById("pressToStart").innerHTML="";
+			var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+			
+			//Checking to see if the letter has already been guessed. If it has been entered already, flag = true, then the function does not go to check the blankWord against the user's guess. 
+			var flag = false;
+			for (var j=0; j<lettersUsed.length;j++){
+				if (userGuess === lettersUsed[j]){
+					flag = true;
+					break;
+				}
+			}
+
+			//If letter has not been guessed, the following logic will run to check if the user input is contained within the random word. 
+			if (flag === false){
+				//Holder being created to correctly decrease guesses remainng
+				var holder = false;
+				for (var i=0; i<selectedWord.length; i++){
+					if (userGuess === selectedWord.charAt(i)){
+						blankWord[i] = userGuess;
+						console.log(blankWord);
+						holder = true;
+						counter ++;
+						winOrLose();
+						console.log("Counter: " + counter);
+						console.log("Length of word: " + selectedWord.length);
+					} 
+				}
+				//Guesses remainng only decreases if the letter that is guessed by the user is not contained in the random word.
+				if (holder === false){
+					guessesRemaining--;
+					console.log("Guesses remaining: " + guessesRemaining);
+					document.getElementById("lives-left").innerHTML="Guesses left: " + guessesRemaining;
+					winOrLose();
+					console.log("Counter is: " + counter);
+				} 
+
+				console.log(lettersUsed);
+				lettersUsed.push(userGuess);
+				document.getElementById("letters-used").innerHTML=lettersUsed.join("").toUpperCase();
+			}
+
+			document.getElementById("blank-word").innerHTML = blankWord.join("").toUpperCase();
+		}
+	};	
 
 
+	//Function that determines when a user wins or loses.
+	function winOrLose(){
+		if (guessesRemaining < 1){
+			document.getElementById("winOrLose").innerHTML="You Lose, Loser! Press any key to try again!";
+			initiate();
+		} else if (counter === selectedWord.length-space){
+			document.getElementById("winOrLose").innerHTML="You Win, Winner! Press any key to play again!";
+			wins++;
+			document.getElementById("wins").innerHTML="Wins: " + wins;
+			initiate();
+		}
+	};
 
+	function removeElement(node) {
+    	node.parentNode.removeChild(node);
+	};
 
-
-
-
-
-
-
-
-
-
-
-
-
-// 	var questionIndex = wordChoice.indexOf(selectedWord);
-// 	var selectedHint = hintChoice[questionIndex];
-// 	console.log(selectedWord + " " + selectedHint);
-
-// for (var i=0; i<wordChoice.length; i++){
-// 	console.log(selectedWord.charAt(i));
-// 	document.querySelector("#guess-word").innerHTML = selectedWord.charAt(i);
-// }
-
-
-// document.onkeyup = function(event)
-
-
-
-			// document.onkeyup = function(event){
-		
-			// //Determines which key was pressed, then makes it lowercase//
-			// 	var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
-			// //This function is run whenever the user presses key//
-
-			// 	if(userGuess !== 'r' && userGuess !== 'p' && userGuess !=='s'){
-					
-			// 		alert("Please insert correct value")
-			// 	}
-			// 	//Alerts the key the user pressed (userGuess)//
-			// 	if(userGuess == 'r' || userGuess == 'p' || userGuess =='s'){
-			// 		alert("User selects: " + userGuess);
-			// 		var computerGuess = options[Math.floor(Math.random() * options.length)]; //Randomly chooses a choice from the options array. This is the computer's guess//
-			// 		alert("Computer selects: " + computerGuess); //Alerts the computer's guess//
-			// 		//Win Conditions//
-			// 		if(userGuess =='r'){
-			// 			if(computerGuess=='r'){
-			// 				tie++;
-			// 			} else if(computerGuess == 'p'){
-			// 				lose++;
-			// 			} else {
-			// 				win++;
-			// 			}
-			// 		}
-			// 		if(userGuess =='p'){
-			// 			if(computerGuess=='p'){
-			// 				tie++;
-			// 			} else if(computerGuess == 's'){
-			// 				lose++;
-			// 			} else {
-			// 				win++;
-			// 			}
-			// 		}
-			// 		if(userGuess =='s'){
-			// 			if(computerGuess=='s'){
-			// 				tie++;
-			// 			} else if(computerGuess == 'r'){
-			// 				lose++;
-			// 			} else {
-			// 				win++;
-			// 			}
-			// 		}
-			// 	}
-
-			// 	
-			// 	document.querySelector("#lose").innerHTML = "Losses: " + lose;
-			// 	document.querySelector("#tie").innerHTML = "Ties: " + tie;
-			// };
+	function initiate(){
+		document.onkeyup = function(){
+			document.getElementById("winOrLose").innerHTML="";
+			counter = 0;
+			space = 0;
+			guessesRemaining = 10;
+			selectedWord = [];
+			selectedHint = [];
+			lettersUsed = [];
+			blankWord = [];
+			document.getElementById("letters-used").innerHTML=" ";
+			produceWord();
+			play();
+		}
+	};
+};
