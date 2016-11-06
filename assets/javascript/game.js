@@ -1,4 +1,4 @@
-window.onload = function(){	
+	
 	//Object of the array of phrases [0] and hint for that phrase [1].
 	var phraseChoice = {
 		p1: ["kitten mittons", "This is Charlie Kelly's invention for cats that stomp around too loudly"],
@@ -36,6 +36,7 @@ window.onload = function(){
 
 	var guessesRemaining = 10; //Variable to hold the index of guesses remainng
 	var wins = 0; //# of wins in a session
+	var drawingIndex = 0;
 
 	var randomNumber;
 	var selectedWord = []; //Word(s) that are selected from the phraseArray
@@ -82,13 +83,145 @@ window.onload = function(){
 			document.getElementById("lives-left").innerHTML="Chances left: " + guessesRemaining;
 	};
 
-	//Hint if user clicks hint button
+	//Hint that displays
 	var hint = function hint(){
 		document.getElementById("hintLocation").innerHTML="Hint: " + selectedHint;
 		console.log(selectedHint);
 	};
 	
+	//Drawing the Hangman function
+	// var canvas = function(){
+	// 	var context = document.getElementById("hangman").getContext("2d");
+	// 	context.beginPath();
+	// 	context.strokeStyle = "blue";
+	// 	context.lineWidth = 2;
+	// };
+
+	// var drawHangman = {
+	// 	head: function (){
+	// 		var context = document.getElementById("hangman").getContext("2d");
+	// 		context.beginPath();
+	// 		context.arc(60, 25, 10, 0, Math.PI*2, true);
+	// 		context.stroke();	
+	// 	},
+
+	// 	draw: function($pathFromx, $pathFromy, $pathTox, $pathToy){
+	// 		var context = document.getElementById("hangman").getContext("2d");
+	// 		context.moveTo($pathFromx, $pathFromy);
+	// 		context.lineTo($pathTox, $pathToy);
+	// 		context.stroke();
+	// 		context.strokeStyle = "yellow";
+	// 		context.lineWidth = 2;
+	// 	},
+
+	// 	frame1: function(){
+	// 		this.draw(0, 150, 150, 150);
+	// 	},
+		
+	// 	frame2: function(){
+	// 		this.draw(10, 0, 10, 600);
+	// 	},
+
+	// 	frame3: function(){
+	// 		this.draw (0, 5, 70, 5);
+	// 	},
+
+	// 	frame4:  function(){
+	// 		this.draw (60, 5, 60, 15);
+	// 	},
+
+	// 	torso: function(){
+	// 		this.draw (60, 36, 60, 70);
+	// 	},
+
+	// 	rightArm: function(){
+	// 		this.draw (60, 46, 100, 50);
+	// 	},
+
+	// 	leftArm: function(){
+	// 		this.draw (60, 46, 20, 50);
+	// 	},
+
+	// 	rightLeg: function(){
+	// 		this.draw (60, 70, 100, 100);
+	// 	},
+
+	// 	leftLeg: function(){
+	// 		this.draw (60, 70, 20, 100);
+	// 	}, 
+	
+ //  		drawArray: [this.frame1, this.frame2, this.frame3, this.frame4, this.head, this.torso, this.leftArm, this.rightArm, this.leftLeg, this.rightLeg],
+	
+	// 	animate: function(){
+	// 		this.drawArray[drawingIndex]();
+	// 	}
+
+	// };
+
+
+
+	var head = function(){
+		var context = document.getElementById("hangman").getContext("2d");
+		context.beginPath();
+		context.arc(60, 25, 10, 0, Math.PI*2, true);
+		context.stroke();
+	};
+
+	var draw = function($pathFromx, $pathFromy, $pathTox, $pathToy) {
+		var context = document.getElementById("hangman").getContext("2d");
+		context.moveTo($pathFromx, $pathFromy);
+	    context.lineTo($pathTox, $pathToy);
+	    context.stroke(); 
+	    context.strokeStyle = "yellow";
+	    context.lineWidth = 2;
+	};
+
+	var frame1 = function(){
+		draw(0, 150, 150, 150);
+	};
+
+	var frame2 = function(){
+		draw(10, 0, 10, 600);
+	};
+
+	var frame3 = function(){
+		draw (0, 5, 70, 5);
+	};
+
+	var frame4 = function(){
+		draw (60, 5, 60, 15);
+	};
+
+	var torso = function(){
+		draw (60, 36, 60, 70);
+	};
+
+	var rightArm = function(){
+		draw (60, 46, 100, 50);
+	};
+
+	var leftArm = function(){
+		draw (60, 46, 20, 50);
+	};
+
+	var rightLeg = function(){
+		draw (60, 70, 100, 100);
+	};
+
+	var leftLeg = function(){
+		draw (60, 70, 20, 100);
+	}; 
+	
+  	var drawArray = [frame1, frame2, frame3, frame4, head, torso, leftArm, rightArm, leftLeg, rightLeg];
+	
+	var animate = function(){
+		drawArray[drawingIndex]();
+	}
+
+	frame1();
+
 	play();
+
 	//When user enters key, this function  controls what happens when user types a key.  
 	function play(){
 		document.onkeyup = function(){
@@ -111,7 +244,6 @@ window.onload = function(){
 				for (var i=0; i<selectedWord.length; i++){
 					if (userGuess === selectedWord.charAt(i)){
 						blankWord[i] = userGuess;
-						console.log(blankWord);
 						holder = true;
 						counter ++;
 						winOrLose();
@@ -122,6 +254,8 @@ window.onload = function(){
 				//Guesses remainng only decreases if the letter that is guessed by the user is not contained in the random word.
 				if (holder === false){
 					guessesRemaining--;
+					animate();;
+					drawingIndex++;
 					console.log("Guesses remaining: " + guessesRemaining);
 					document.getElementById("lives-left").innerHTML="Guesses left: " + guessesRemaining;
 					winOrLose();
@@ -151,10 +285,7 @@ window.onload = function(){
 		}
 	};
 
-	function removeElement(node) {
-    	node.parentNode.removeChild(node);
-	};
-
+	//Function that resets the game once the user has won or lost
 	function initiate(){
 		document.onkeyup = function(){
 			document.getElementById("winOrLose").innerHTML="";
@@ -165,9 +296,10 @@ window.onload = function(){
 			selectedHint = [];
 			lettersUsed = [];
 			blankWord = [];
+			document.getElementById("hangman").getContext("2d").clearRect(0, 0, 400, 400);
+			drawingIndex = 0;
 			document.getElementById("letters-used").innerHTML=" ";
 			produceWord();
 			play();
 		}
 	};
-};
