@@ -10,3 +10,5 @@ To do: add style and sound effects to this particular game.
 Update: I removed bootstrap to try and style the program using only CSS. I got started but then decided to add a hangman drawing feature to correspond with incorrect guesse. I was successful in doing that, but am stuck on how to clear the entire image when trying the game again. The program is able to remove the whole image upon a reset, but upon the first incorrect user guess, the man reappears.
 
 To do: Figure out how to remove the man completely on a reset game. Continue to style it.
+
+Update: I added beginPath() to the beginning of the draw functions and closePath() to the end, and now the clearRect method works correctly.
