@@ -165,15 +165,18 @@
 		context.beginPath();
 		context.arc(60, 25, 10, 0, Math.PI*2, true);
 		context.stroke();
+		context.closePath();
 	};
 
 	var draw = function($pathFromx, $pathFromy, $pathTox, $pathToy) {
 		var context = document.getElementById("hangman").getContext("2d");
+		context.beginPath();
 		context.moveTo($pathFromx, $pathFromy);
 	    context.lineTo($pathTox, $pathToy);
 	    context.stroke(); 
 	    context.strokeStyle = "yellow";
 	    context.lineWidth = 2;
+	    context.closePath();
 	};
 
 	var frame1 = function(){
