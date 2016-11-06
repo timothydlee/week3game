@@ -89,77 +89,7 @@
 		console.log(selectedHint);
 	};
 	
-	//Drawing the Hangman function
-	// var canvas = function(){
-	// 	var context = document.getElementById("hangman").getContext("2d");
-	// 	context.beginPath();
-	// 	context.strokeStyle = "blue";
-	// 	context.lineWidth = 2;
-	// };
-
-	// var drawHangman = {
-	// 	head: function (){
-	// 		var context = document.getElementById("hangman").getContext("2d");
-	// 		context.beginPath();
-	// 		context.arc(60, 25, 10, 0, Math.PI*2, true);
-	// 		context.stroke();	
-	// 	},
-
-	// 	draw: function($pathFromx, $pathFromy, $pathTox, $pathToy){
-	// 		var context = document.getElementById("hangman").getContext("2d");
-	// 		context.moveTo($pathFromx, $pathFromy);
-	// 		context.lineTo($pathTox, $pathToy);
-	// 		context.stroke();
-	// 		context.strokeStyle = "yellow";
-	// 		context.lineWidth = 2;
-	// 	},
-
-	// 	frame1: function(){
-	// 		this.draw(0, 150, 150, 150);
-	// 	},
-		
-	// 	frame2: function(){
-	// 		this.draw(10, 0, 10, 600);
-	// 	},
-
-	// 	frame3: function(){
-	// 		this.draw (0, 5, 70, 5);
-	// 	},
-
-	// 	frame4:  function(){
-	// 		this.draw (60, 5, 60, 15);
-	// 	},
-
-	// 	torso: function(){
-	// 		this.draw (60, 36, 60, 70);
-	// 	},
-
-	// 	rightArm: function(){
-	// 		this.draw (60, 46, 100, 50);
-	// 	},
-
-	// 	leftArm: function(){
-	// 		this.draw (60, 46, 20, 50);
-	// 	},
-
-	// 	rightLeg: function(){
-	// 		this.draw (60, 70, 100, 100);
-	// 	},
-
-	// 	leftLeg: function(){
-	// 		this.draw (60, 70, 20, 100);
-	// 	}, 
-	
- //  		drawArray: [this.frame1, this.frame2, this.frame3, this.frame4, this.head, this.torso, this.leftArm, this.rightArm, this.leftLeg, this.rightLeg],
-	
-	// 	animate: function(){
-	// 		this.drawArray[drawingIndex]();
-	// 	}
-
-	// };
-
-
-
+	//Drawing the Hangman functions
 	var head = function(){
 		var context = document.getElementById("hangman").getContext("2d");
 		context.beginPath();
